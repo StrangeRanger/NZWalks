@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("UserSecretConnectionString");
+// var connectionString = builder.Configuration.GetConnectionString("NZWalksConnectionString");
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,8 +17,7 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
                                                     // Specify the connection string used by the DbContext.
                                                     // NOTE: Connection string is specified within the
                                                     // 'appsettings.json' file.
-                                                    options.UseSqlServer(builder.Configuration.GetConnectionString(
-                                                        "NZWalksConnectionString"));
+                                                    options.UseSqlServer(connectionString);
                                                 });
 
 var app = builder.Build();

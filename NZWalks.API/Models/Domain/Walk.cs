@@ -11,8 +11,8 @@ public class Walk
     public Guid RegionId { get; set; }
 
     /// Navigation properties:
-    /// Indicate to Entity Framework that there is a relationship between the classes, which is represented by
-    /// foreign keys.
+    ///     Indicate to Entity Framework that there is a relationship between the classes, which is represented by
+    ///     foreign keys.
     public Difficulty Difficulty { get; set; }
     public Region Region { get; set; }
 }

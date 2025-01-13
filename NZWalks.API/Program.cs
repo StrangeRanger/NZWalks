@@ -15,8 +15,8 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
                                                     // Specify the connection string used by the DbContext.
                                                     // NOTE: Connection string is specified within the
                                                     // 'appsettings.json' file.
-                                                    options.UseSqlServer(
-                                                        builder.Configuration.GetConnectionString("NZWalksDbContext"));
+                                                    options.UseSqlServer(builder.Configuration.GetConnectionString(
+                                                        "NZWalksConnectionString"));
                                                 });
 
 var app = builder.Build();

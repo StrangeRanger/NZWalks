@@ -1,12 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
+using NZWalks.API.Data;
+using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Controllers;
 
-public class RegionsController : Controller
+[ApiController]
+[Route("api/[controller]")]
+public class RegionsController : ControllerBase
 {
-    // GET
-    public IActionResult Index()
+    // Represents a session with the database, allowing us to query and save instances of our entities.
+    private readonly NZWalksDbContext _dbContext;
+
+    public RegionsController(NZWalksDbContext dbContext)
     {
-        return View();
+        _dbContext = dbContext;
+    }
+
+    [HttpGet]
+    public IActionResult GetAllRegions()
+    {
+        List<Region> regions = _dbContext.Regions.ToList();
+
+        return Ok(regions);
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetRegionById(Guid id)
+    {
+        Region? region = _dbContext.Regions.FirstOrDefault(r => r.Id == id);
+
+        if (region is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(region);
     }
 }

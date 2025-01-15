@@ -11,13 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(); // Required to use the controllers inside the 'Controllers' folder.
 
 // Inject the DbContext into the services' container.
-builder.Services.AddDbContext<NZWalksDbContext>(options =>
-                                                {
-                                                    // Specify the connection string used by the DbContext.
-                                                    // NOTE: Connection string is specified within the
-                                                    // 'appsettings.json' file.
-                                                    options.UseSqlServer(connectionString);
-                                                });
+builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

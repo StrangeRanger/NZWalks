@@ -94,4 +94,36 @@ public class RegionsController : ControllerBase
         // TODO: Understand this portion better...
         return CreatedAtAction(nameof(GetRegionById), new { id = regionDto.Id }, regionDto);
     }
+    
+    [HttpPut("{id:Guid}")]
+    public IActionResult UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+    {
+        // Check if region exists.
+        Region? region = _dbContext.Regions.FirstOrDefault(r => r.Id == id);
+
+        if (region is null)
+        {
+            return NotFound();
+        }
+
+        // Update Domain Model.
+        region.Code = updateRegionRequestDto.Code;
+        region.Name = updateRegionRequestDto.Name;
+        region.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
+
+        // Save Changes to Database.
+        _dbContext.SaveChanges();
+
+       // Convert Domain Model to DTO.
+        RegionDto regionDto = new()
+        {
+            Id = region.Id,
+            Code = region.Code,
+            Name = region.Name,
+            RegionImageUrl = region.RegionImageUrl
+        };
+
+        // Return DTO.
+        return Ok(regionDto);
+    }
 }

@@ -95,7 +95,7 @@ public class RegionsController : ControllerBase
         // TODO: Understand this portion better...
         return CreatedAtAction(nameof(GetRegionById), new { id = regionDto.Id }, regionDto);
     }
-    
+
     [HttpPut("{id:Guid}")]
     public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
     {
@@ -115,7 +115,7 @@ public class RegionsController : ControllerBase
         // Save Changes to Database.
         await _dbContext.SaveChangesAsync();
 
-       // Convert Domain Model to DTO.
+        // Convert Domain Model to DTO.
         RegionDto regionDto = new()
         {
             Id = region.Id,
@@ -127,7 +127,7 @@ public class RegionsController : ControllerBase
         // Return DTO.
         return Ok(regionDto);
     }
-    
+
     [HttpDelete("{id:Guid}")]
     public async Task<IActionResult> DeleteRegion([FromRoute] Guid id)
     {
@@ -142,7 +142,7 @@ public class RegionsController : ControllerBase
         // Remove Domain Model from Database.
         _dbContext.Regions.Remove(region);
         await _dbContext.SaveChangesAsync();
-        
+
         // Convert Domain Model to DTO.
         RegionDto regionDto = new()
         {

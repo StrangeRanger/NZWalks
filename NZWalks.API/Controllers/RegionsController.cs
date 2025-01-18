@@ -41,8 +41,8 @@ public class RegionsController : ControllerBase
         return Ok(regionsDto);
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetRegionById(Guid id)
+    [HttpGet("{id:Guid}")]
+    public IActionResult GetRegionById([FromRoute] Guid id)
     {
         // Get Data From Database - Domain model.
         Region? region = _dbContext.Regions.FirstOrDefault(r => r.Id == id);
@@ -63,5 +63,35 @@ public class RegionsController : ControllerBase
 
         // Return DTO.
         return Ok(regionDto);
+    }
+
+    [HttpPost]
+    public IActionResult AddRegion([FromBody] AddRegionRequestDto addRegionRequestDto)
+    {
+        // Map DTO to Domain Model.
+        // TODO: Figure out how Id is getting created and retrieved in the 'regionDto'...
+        Region region = new()
+        {
+            Code = addRegionRequestDto.Code,
+            Name = addRegionRequestDto.Name,
+            RegionImageUrl = addRegionRequestDto.RegionImageUrl
+        };
+
+        // Add Domain Model to Database.
+        _dbContext.Regions.Add(region);
+        _dbContext.SaveChanges();
+
+        // Map Domain Model to DTO.
+        RegionDto regionDto = new()
+        {
+            Id = region.Id,
+            Code = region.Code,
+            Name = region.Name,
+            RegionImageUrl = region.RegionImageUrl
+        };
+
+        // Return DTO.
+        // TODO: Understand this portion better...
+        return CreatedAtAction(nameof(GetRegionById), new { id = regionDto.Id }, regionDto);
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+
 using NZWalks.API.Data;
 using NZWalks.API.Dto.Domain;
 using NZWalks.API.Models.Domain;
@@ -27,8 +28,13 @@ public class RegionsController : ControllerBase
         List<RegionDto> regionsDto = new();
         foreach (Region region in regions)
         {
-            regionsDto.Add(new RegionDto() { Id = region.Id, Code = region.Code, Name = region.Name,
-                                             RegionImageUrl = region.RegionImageUrl });
+            regionsDto.Add(new RegionDto()
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl
+            });
         }
 
         // Return DTOs.
@@ -47,8 +53,13 @@ public class RegionsController : ControllerBase
         }
 
         // Map Domain Model to DTO.
-        RegionDto regionDto =
-            new() { Id = region.Id, Code = region.Code, Name = region.Name, RegionImageUrl = region.RegionImageUrl };
+        RegionDto regionDto = new()
+        {
+            Id = region.Id,
+            Code = region.Code,
+            Name = region.Name,
+            RegionImageUrl = region.RegionImageUrl
+        };
 
         // Return DTO.
         return Ok(regionDto);

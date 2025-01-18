@@ -126,4 +126,32 @@ public class RegionsController : ControllerBase
         // Return DTO.
         return Ok(regionDto);
     }
+    
+    [HttpDelete("{id:Guid}")]
+    public IActionResult DeleteRegion([FromRoute] Guid id)
+    {
+        // Check if region exists.
+        Region? region = _dbContext.Regions.FirstOrDefault(r => r.Id == id);
+
+        if (region is null)
+        {
+            return NotFound();
+        }
+
+        // Remove Domain Model from Database.
+        _dbContext.Regions.Remove(region);
+        _dbContext.SaveChanges();
+        
+        // Convert Domain Model to DTO.
+        RegionDto regionDto = new()
+        {
+            Id = region.Id,
+            Code = region.Code,
+            Name = region.Name,
+            RegionImageUrl = region.RegionImageUrl
+        };
+
+        // Return deleted region.
+        return Ok(regionDto);
+    }
 }

@@ -13,18 +13,18 @@ namespace NZWalks.API.Controllers;
 public class RegionsController : ControllerBase
 {
     // Represents a collection of methods that allow us to interact with the Region table in the database.
-    private readonly IRegionRepository _regionRepository;
+    private readonly IRepository<Region> _repository;
 
-    public RegionsController(IRegionRepository regionRepository)
+    public RegionsController(IRepository<Region> repository)
     {
-        _regionRepository = regionRepository;
+        _repository = repository;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllRegions()
     {
         // Get regions from database via Repository.
-        List<Region> regionsDomainModel = await _regionRepository.GetAllRegionsAsync();
+        List<Region> regionsDomainModel = await _repository.GetAllAsync();
 
         // Map Domain Models to DTOs.
         List<RegionDto> regionDto = new();
@@ -47,7 +47,7 @@ public class RegionsController : ControllerBase
     public async Task<IActionResult> GetRegionById([FromRoute] Guid id)
     {
         // Get region via id from database via Repository.
-        Region? regionDomainModel = await _regionRepository.GetRegionByIdAsync(id);
+        Region? regionDomainModel = await _repository.GetByIdAsync(id);
 
         if (regionDomainModel is null)
         {
@@ -80,7 +80,7 @@ public class RegionsController : ControllerBase
         };
 
         // Add region to database via Repository.
-        await _regionRepository.AddRegionAsync(regionDomainModel);
+        await _repository.AddAsync(regionDomainModel);
 
         // Map Domain Model to DTO.
         RegionDto regionDto = new()
@@ -108,7 +108,7 @@ public class RegionsController : ControllerBase
         };
 
         // Update region in database via Repository.
-        regionDomainModel = await _regionRepository.UpdateRegionAsync(id, regionDomainModel);
+        regionDomainModel = await _repository.UpdateAsync(id, regionDomainModel);
 
         if (regionDomainModel is null)
         {
@@ -132,7 +132,7 @@ public class RegionsController : ControllerBase
     public async Task<IActionResult> DeleteRegion([FromRoute] Guid id)
     {
         // Delete region from database via Repository.
-        Region? regionDomainModel = await _regionRepository.DeleteRegionAsync(id);
+        Region? regionDomainModel = await _repository.DeleteAsync(id);
 
         if (regionDomainModel is null)
         {

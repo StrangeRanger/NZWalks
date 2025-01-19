@@ -5,7 +5,7 @@ using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Repositories;
 
-public class SqlRegionRepository : IRegionRepository
+public class SqlRegionRepository : IRepository<Region>
 {
     private readonly NZWalksDbContext _dbContext;
 
@@ -14,26 +14,26 @@ public class SqlRegionRepository : IRegionRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Region>> GetAllRegionsAsync()
+    public async Task<List<Region>> GetAllAsync()
     {
         // Get all regions from the database.
         return await _dbContext.Regions.ToListAsync();
     }
 
-    public async Task<Region?> GetRegionByIdAsync(Guid id)
+    public async Task<Region?> GetByIdAsync(Guid id)
     {
         // Get the region with the specified ID from the database.
         return await _dbContext.Regions.FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<Region> AddRegionAsync(Region region)
+    public async Task<Region> AddAsync(Region region)
     {
         await _dbContext.Regions.AddAsync(region);
         await _dbContext.SaveChangesAsync();
         return region;
     }
 
-    public async Task<Region?> UpdateRegionAsync(Guid id, Region region)
+    public async Task<Region?> UpdateAsync(Guid id, Region region)
     {
         // Find the existing region in the database.
         Region? existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(r => r.Id == id);
@@ -53,7 +53,7 @@ public class SqlRegionRepository : IRegionRepository
         return existingRegion;
     }
 
-    public async Task<Region?> DeleteRegionAsync(Guid id)
+    public async Task<Region?> DeleteAsync(Guid id)
     {
         // Find the existing region in the database.
         Region? existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(r => r.Id == id);

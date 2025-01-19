@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using NZWalks.API.Data;
+using NZWalks.API.Models.Domain;
 using NZWalks.API.Repositories;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,7 @@ builder.Services.AddControllers(); // Required to use the controllers inside the
 builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(connectionString));
 // Inject the RegionRepository into the services' container. This will allow us to use the RegionRepository in the
 // RegionsController.
-builder.Services.AddScoped<IRegionRepository, SqlRegionRepository>();
+builder.Services.AddScoped<IRepository<Region>, SqlRegionRepository>();
 
 WebApplication app = builder.Build();
 

@@ -3,7 +3,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 using NZWalks.API.CustomActionFilters;
-using NZWalks.API.Dto.Domain;
 using NZWalks.API.Dto.Domain.Walk;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Repositories;

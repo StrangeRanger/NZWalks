@@ -1,13 +1,9 @@
 using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 using NZWalks.API.CustomActionFilters;
-using NZWalks.API.Data;
-using NZWalks.API.Dto.Domain;
 using NZWalks.API.Dto.Domain.Region;
-using NZWalks.API.Mappings;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Repositories;
 

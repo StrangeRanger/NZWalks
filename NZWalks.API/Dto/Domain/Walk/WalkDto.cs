@@ -1,6 +1,5 @@
 using NZWalks.API.Dto.Domain.Difficulty;
 using NZWalks.API.Dto.Domain.Region;
-using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Dto.Domain.Walk;
 

@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+using NZWalks.API.CustomActionFilters;
 using NZWalks.API.Data;
 using NZWalks.API.Dto.Domain;
 using NZWalks.API.Dto.Domain.Region;
@@ -53,13 +54,9 @@ public class RegionsController : ControllerBase
     }
 
     [HttpPost]
+    [ValidateModel]
     public async Task<IActionResult> AddRegion([FromBody] AddRegionRequestDto addRegionRequestDto)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
         // Map DTO to Domain Model.
         Region regionDomainModel = _mapper.Map<Region>(addRegionRequestDto);
 
@@ -75,13 +72,9 @@ public class RegionsController : ControllerBase
     }
 
     [HttpPut("{id:Guid}")]
+    [ValidateModel]
     public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
         // Map DTO to Domain Model.
         Region? regionDomainModel = _mapper.Map<Region>(updateRegionRequestDto);
 

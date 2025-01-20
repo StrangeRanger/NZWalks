@@ -1,4 +1,4 @@
-namespace NZWalks.API.Dto.Domain;
+namespace NZWalks.API.Dto.Domain.Region;
 
 /*
  * We implement the DTOs, despite it feeling redundant, because it allows us to control what data is sent to the

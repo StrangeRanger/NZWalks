@@ -1,6 +1,7 @@
 using AutoMapper;
 
 using NZWalks.API.Dto.Domain;
+using NZWalks.API.Dto.Domain.Region;
 using NZWalks.API.Dto.Domain.Walk;
 using NZWalks.API.Models.Domain;
 

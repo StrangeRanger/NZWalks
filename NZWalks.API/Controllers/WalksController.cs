@@ -57,6 +57,39 @@ public class WalksController : ControllerBase
         Walk addedWalk = await _repository.AddAsync(walkDomainModel);
 
         // Return DTO.
-        return CreatedAtAction(nameof(GetWalkById), new { id = addedWalk.Id }, _mapper.Map<WalkDto>(addedWalk));
+        return CreatedAtAction(nameof(GetWalkById), new { id = addedWalk.Id }, _mapper.Map<AddWalkRequestDto>(addedWalk));
+    }
+
+    [HttpPut("{id:Guid}")]
+    public async Task<IActionResult> UpdateWalks([FromRoute] Guid id, [FromBody] UpdateWalkRequestDto updateWalkRequestDto)
+    {
+        // Map DTO to Domain Model.
+        Walk walkDomainModel = _mapper.Map<Walk>(updateWalkRequestDto);
+
+        // Update walk in database via Repository.
+        Walk? updatedWalk = await _repository.UpdateAsync(id, walkDomainModel);
+
+        if (updatedWalk is null)
+        {
+            return NotFound();
+        }
+
+        // Return DTO.
+        return Ok(_mapper.Map<UpdateWalkRequestDto>(updatedWalk));
+    }
+
+    [HttpDelete("{id:Guid}")]
+    public async Task<IActionResult> DeleteWalks([FromRoute] Guid id)
+    {
+        // Delete walk from database via Repository.
+        Walk? deletedWalk = await _repository.DeleteAsync(id);
+
+        if (deletedWalk is null)
+        {
+            return NotFound();
+        }
+
+        // Return DTO.
+        return Ok(_mapper.Map<DeleteWalkRequestDto>(deletedWalk));
     }
 }

@@ -39,11 +39,41 @@ public class SqlWalkRepository : IRepository<Walk>
 
     public async Task<Walk?> UpdateAsync(Guid id, Walk walk)
     {
-        throw new NotImplementedException();
+        // Find the existing walk in the database.
+        Walk? existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(r => r.Id == id);
+
+        if (existingWalk is null)
+        {
+            return null;
+        }
+
+        // Update the existing walk with the new values.
+        existingWalk.Name = walk.Name;
+        existingWalk.Description = walk.Description;
+        existingWalk.LengthInKm = walk.LengthInKm;
+        existingWalk.WalkImageUrl = walk.WalkImageUrl;
+        existingWalk.RegionId = walk.RegionId;
+        existingWalk.DifficultyId = walk.DifficultyId;
+
+        // Save the changes to the database and return the updated walk.
+        await _dbContext.SaveChangesAsync();
+        return existingWalk;
     }
 
     public async Task<Walk?> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        // Find the existing walk in the database.
+        Walk? existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(r => r.Id == id);
+
+        if (existingWalk is null)
+        {
+            return null;
+        }
+
+        // Remove the walk from the database and save the changes.
+        _dbContext.Walks.Remove(existingWalk);
+        await _dbContext.SaveChangesAsync();
+
+        return existingWalk;
     }
 }

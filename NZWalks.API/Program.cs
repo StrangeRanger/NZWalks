@@ -19,6 +19,9 @@ builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(
 // Inject the RegionRepository into the services' container. This will allow us to use the RegionRepository in the
 // RegionsController.
 builder.Services.AddScoped<IRepository<Region>, SqlRegionRepository>();
+// Inject the WalkRepository into the services' container. This will allow us to use the WalkRepository in the
+// WalksController.
+builder.Services.AddScoped<IRepository<Walk>, SqlWalkRepository>();
 // Inject AutoMapper into the services' container. This will allow us to use AutoMapper in within the Controllers.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

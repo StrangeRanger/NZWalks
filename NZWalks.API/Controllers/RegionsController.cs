@@ -96,7 +96,7 @@ public class RegionsController : ControllerBase
         {
             return NotFound();
         }
-        
+
         // Return deleted region.
         return Ok(_mapper.Map<RegionDto>(regionDomainModel));
     }

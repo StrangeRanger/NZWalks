@@ -17,13 +17,17 @@ public class SqlWalkRepository : IRepository<Walk>
     public async Task<List<Walk>> GetAllAsync()
     {
         // Get all walks from the database.
-        return await _dbContext.Walks.ToListAsync();
+        // The 'Include' method is used to include related entities in the query results. Entity Framework knows what to
+        // include based on the navigation properties defined in the model classes.
+        return await _dbContext.Walks.Include(x => x.Difficulty).Include(x => x.Region).ToListAsync();
     }
 
     public async Task<Walk?> GetByIdAsync(Guid id)
     {
         // Get the walk with the specified ID from the database.
-        return await _dbContext.Walks.FirstOrDefaultAsync(r => r.Id == id);
+        // The 'Include' method is used to include related entities in the query results. Entity Framework knows what to
+        // include based on the navigation properties defined in the model classes.
+        return await _dbContext.Walks.Include(x => x.Difficulty).Include(x => x.Region).FirstOrDefaultAsync(r => r.Id == id);
     }
 
     public async Task<Walk> AddAsync(Walk walk)

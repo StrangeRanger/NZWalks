@@ -13,7 +13,7 @@ public class SqlWalkRepository : IWalkRepository
     {
         _dbContext = dbContext;
     }
-    
+
     /// <param name="filterOn">The property/table column to filter on, such as 'Name'.</param>
     /// <param name="filterQuery">
     /// The text to filter for. For example, if 'filterOn' is 'Name', then 'filterQuery' could be 'beach' to find all
@@ -42,7 +42,7 @@ public class SqlWalkRepository : IWalkRepository
                     return new List<Walk>();
             }
         }
-        
+
         return await walks.ToListAsync();
     }
 

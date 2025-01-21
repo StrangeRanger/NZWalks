@@ -5,7 +5,7 @@ using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Repositories;
 
-public class SqlRegionRepository : IRepository<Region>
+public class SqlRegionRepository : IRegionRepository
 {
     private readonly NZWalksDbContext _dbContext;
 

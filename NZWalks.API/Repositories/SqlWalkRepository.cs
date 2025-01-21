@@ -5,7 +5,7 @@ using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Repositories;
 
-public class SqlWalkRepository : IRepository<Walk>
+public class SqlWalkRepository : IWalkRepository
 {
     private readonly NZWalksDbContext _dbContext;
 

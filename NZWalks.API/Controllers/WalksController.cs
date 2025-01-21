@@ -13,10 +13,10 @@ namespace NZWalks.API.Controllers;
 [Route("api/[controller]")]
 public class WalksController : ControllerBase
 {
-    private readonly IRepository<Walk> _repository;
+    private readonly IWalkRepository _repository;
     private readonly IMapper _mapper;
 
-    public WalksController(IRepository<Walk> repository, IMapper mapper)
+    public WalksController(IWalkRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

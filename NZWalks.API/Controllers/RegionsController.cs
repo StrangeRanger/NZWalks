@@ -14,11 +14,11 @@ namespace NZWalks.API.Controllers;
 public class RegionsController : ControllerBase
 {
     // Represents a collection of methods that allow us to interact with the Region table in the database.
-    private readonly IRepository<Region> _repository;
+    private readonly IRegionRepository _repository;
     // Represents a type used to perform object-object mapping.
     private readonly IMapper _mapper;
 
-    public RegionsController(IRepository<Region> repository, IMapper mapper)
+    public RegionsController(IRegionRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

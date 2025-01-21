@@ -1,3 +1,5 @@
+using NZWalks.API.Models.Domain;
+
 namespace NZWalks.API.Repositories;
 
 /*
@@ -8,11 +10,11 @@ namespace NZWalks.API.Repositories;
  * SqlRegionRepository class implements this interface to interact with the database using Entity Framework. This
  * approach promotes a more modular and testable codebase.
  */
-public interface IRepository<T>
+public interface IRegionRepository
 {
-    Task<List<T>> GetAllAsync();
-    Task<T?> GetByIdAsync(Guid id);
-    Task<T> AddAsync(T item);
-    Task<T?> UpdateAsync(Guid id, T item);
-    Task<T?> DeleteAsync(Guid id);
+    Task<List<Region>> GetAllAsync();
+    Task<Region?> GetByIdAsync(Guid id);
+    Task<Region> AddAsync(Region region);
+    Task<Region?> UpdateAsync(Guid id, Region region);
+    Task<Region?> DeleteAsync(Guid id);
 }

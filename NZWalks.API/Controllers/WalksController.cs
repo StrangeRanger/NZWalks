@@ -22,11 +22,13 @@ public class WalksController : ControllerBase
         _mapper = mapper;
     }
 
+    // GET walks
+    // GET: /api/walks?filterOn=Name&filterQuery=Beach
     [HttpGet]
-    public async Task<IActionResult> GetAllWalks()
+    public async Task<IActionResult> GetAllWalks([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
     {
         // Get walks from database via Repository.
-        List<Walk> walksDomainModel = await _repository.GetAllAsync();
+        List<Walk> walksDomainModel = await _repository.GetAllAsync(filterOn, filterQuery);
 
         // Return DTOs.
         return Ok(_mapper.Map<List<WalkDto>>(walksDomainModel));

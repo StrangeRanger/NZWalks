@@ -14,12 +14,31 @@ public class SqlWalkRepository : IWalkRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Walk>> GetAllAsync()
+    public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
-        // Get all walks from the database.
+        // Get all walks from the database, and make them queryable.
         // The 'Include' method is used to include related entities in the query results. Entity Framework knows what to
         // include based on the navigation properties defined in the model classes.
-        return await _dbContext.Walks.Include(x => x.Difficulty).Include(x => x.Region).ToListAsync();
+        IQueryable<Walk> walks = _dbContext.Walks.Include(x => x.Difficulty).Include(x => x.Region).AsQueryable();
+
+        if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+        {
+            switch (filterOn.ToLower())
+            {
+                case "name":
+                    walks = walks.Where(x => x.Name.Contains(filterQuery));
+                    break;
+                case "description":
+                    walks = walks.Where(x => x.Description.Contains(filterQuery));
+                    break;
+                default:
+                    // TODO: Figure out a better way to inform the client that the filterOn value is invalid.
+                    Console.WriteLine($"Invalid filterOn value: {filterOn}");
+                    return new List<Walk>();
+            }
+        }
+        
+        return await walks.ToListAsync();
     }
 
     public async Task<Walk?> GetByIdAsync(Guid id)

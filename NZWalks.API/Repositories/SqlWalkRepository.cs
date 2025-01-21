@@ -13,7 +13,12 @@ public class SqlWalkRepository : IWalkRepository
     {
         _dbContext = dbContext;
     }
-
+    
+    /// <param name="filterOn">The property/table column to filter on, such as 'Name'.</param>
+    /// <param name="filterQuery">
+    /// The text to filter for. For example, if 'filterOn' is 'Name', then 'filterQuery' could be 'beach' to find all
+    /// entities with 'beach' in their name.
+    /// </param>
     public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
         // Get all walks from the database, and make them queryable.

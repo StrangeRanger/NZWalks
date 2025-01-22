@@ -6,11 +6,13 @@ public class AddWalkRequestDto
 {
     [Required]
     [MaxLength(64, ErrorMessage = "The {0} field must be less than {1} characters.")]
-    public string Name { get; set; }
+    // Null forgiving symbol used, because non-nullability is already enforced via the Required attribute.
+    public string Name { get; set; } = null!;
 
     [Required]
     [MaxLength(1000, ErrorMessage = "The {0} field must be less than {1} characters.")]
-    public string Description { get; set; }
+    // Null forgiving symbol used, because non-nullability is already enforced via the Required attribute.
+    public string Description { get; set; } = null!;
 
     [Required]
     [Range(0, 50, ErrorMessage = "The {0} field must be between {1} and {2}.")]

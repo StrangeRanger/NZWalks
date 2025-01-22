@@ -8,8 +8,8 @@ namespace NZWalks.API.Dto.Domain.Region;
  */
 public class RegionDto
 {
-    public Guid Id { get; set; }
-    public string Code { get; set; }
-    public string Name { get; set; }
-    public string? RegionImageUrl { get; set; }
+    public Guid Id { get; init; }
+    public required string Code { get; init; }
+    public required string Name { get; init; }
+    public string? RegionImageUrl { get; init; }
 }

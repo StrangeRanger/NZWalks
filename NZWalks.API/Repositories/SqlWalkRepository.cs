@@ -21,15 +21,19 @@ public class SqlWalkRepository : IWalkRepository
     /// The text to filter for. For example, if 'filterOn' is 'Name', then 'filterQuery' could be 'beach' to find all
     /// entities with 'beach' in their name.
     /// </param>
+    /// <param name="sortBy">The property/table column to sort by, such as 'Name'.</param>
+    /// <param name="isAscending">Whether to sort in ascending order.</param>
     [SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version")]
     [SuppressMessage("Globalization", "CA1304:Specify CultureInfo")]
-    public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
+    public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null,
+        string? sortBy = null, bool isAscending = true)
     {
         // Get all walks from the database, and make them queryable.
         // The 'Include' method is used to include related entities in the query results. Entity Framework knows what to
         // include based on the navigation properties defined in the model classes.
         IQueryable<Walk> walks = _dbContext.Walks.Include(x => x.Difficulty).Include(x => x.Region).AsQueryable();
 
+        // Filtering...
         if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
         {
             switch (filterOn.ToLower())
@@ -43,6 +47,26 @@ public class SqlWalkRepository : IWalkRepository
                 default:
                     // TODO: Figure out a better way to inform the client that the filterOn value is invalid.
                     Console.WriteLine($"Invalid filterOn value: {filterOn}");
+                    Console.Write("Returning empty list...");
+                    return new List<Walk>();
+            }
+        }
+        
+        // Sorting...
+        if (string.IsNullOrWhiteSpace(sortBy) == false)
+        {
+            switch (sortBy.ToLower())
+            {
+                case "name":
+                    walks = isAscending ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+                    break;
+                case "length":
+                    walks = isAscending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
+                    break;
+                default:
+                    // TODO: Figure out a better way to inform the client that the sortBy value is invalid.
+                    Console.WriteLine($"Invalid sortBy value: {sortBy}");
+                    Console.Write("Returning empty list...");
                     return new List<Walk>();
             }
         }

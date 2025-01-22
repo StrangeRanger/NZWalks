@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.EntityFrameworkCore;
 
 using NZWalks.API.Data;
@@ -19,6 +21,8 @@ public class SqlWalkRepository : IWalkRepository
     /// The text to filter for. For example, if 'filterOn' is 'Name', then 'filterQuery' could be 'beach' to find all
     /// entities with 'beach' in their name.
     /// </param>
+    [SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version")]
+    [SuppressMessage("Globalization", "CA1304:Specify CultureInfo")]
     public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
         // Get all walks from the database, and make them queryable.

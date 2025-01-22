@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NZWalks.API.Migrations
 {
     /// <inheritdoc />
+    [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
     public partial class SeedingdataforDifficultiesandRegions : Migration
     {
         /// <inheritdoc />

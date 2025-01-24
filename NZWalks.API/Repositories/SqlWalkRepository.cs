@@ -23,10 +23,18 @@ public class SqlWalkRepository : IWalkRepository
     /// </param>
     /// <param name="sortBy">The property/table column to sort by, such as 'Name'.</param>
     /// <param name="isAscending">Whether to sort in ascending order.</param>
+    /// <param name="pageNumber">
+    /// The page number to retrieve. For example, if 'pageNumber' is 2 and 'pageSize' is 10, then the second page of 10
+    /// entities will be returned.
+    /// </param>
+    /// <param name="pageSize">
+    /// The number of entities to return per page. For example, if 'pageNumber' is 2 and 'pageSize' is 10, then the
+    /// second page of 10 entities will be returned.
+    /// </param>
     [SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version")]
     [SuppressMessage("Globalization", "CA1304:Specify CultureInfo")]
     public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null,
-        string? sortBy = null, bool isAscending = true)
+        string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
     {
         // Get all walks from the database, and make them queryable.
         // The 'Include' method is used to include related entities in the query results. Entity Framework knows what to
@@ -70,8 +78,11 @@ public class SqlWalkRepository : IWalkRepository
                     return new List<Walk>();
             }
         }
+        
+        // Pagination...
+        int skipAmount = (pageNumber - 1) * pageSize;
 
-        return await walks.ToListAsync();
+        return await walks.Skip(skipAmount).Take(pageSize).ToListAsync();
     }
 
     public async Task<Walk?> GetByIdAsync(Guid id)

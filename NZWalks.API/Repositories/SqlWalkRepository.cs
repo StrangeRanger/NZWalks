@@ -59,7 +59,7 @@ public class SqlWalkRepository : IWalkRepository
                     return new List<Walk>();
             }
         }
-        
+
         // Sorting...
         if (string.IsNullOrWhiteSpace(sortBy) == false)
         {
@@ -78,7 +78,7 @@ public class SqlWalkRepository : IWalkRepository
                     return new List<Walk>();
             }
         }
-        
+
         // Pagination...
         int skipAmount = (pageNumber - 1) * pageSize;
 

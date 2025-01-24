@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using NZWalks.API.CustomActionFilters;
@@ -9,8 +10,10 @@ using NZWalks.API.Repositories;
 
 namespace NZWalks.API.Controllers;
 
+// https://localhost:1234/api/regions
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class RegionsController : ControllerBase
 {
     // Represents a collection of methods that allow us to interact with the Region table in the database.

@@ -23,13 +23,15 @@ public class WalksController : ControllerBase
     }
 
     // GET walks
-    // GET: /api/walks?filterOn=Name&filterQuery=Beach&sortBy=Name&isAscending=true
+    // GET: /api/walks?filterOn=Name&filterQuery=Beach&sortBy=Name&isAscending=true&pageNumber=1&pageSize=10
     [HttpGet]
     public async Task<IActionResult> GetAllWalks([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
-        [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+        [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+        [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
     {
         // Get walks from database via Repository.
-        List<Walk> walksDomainModel = await _repository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true);
+        List<Walk> walksDomainModel = await _repository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true,
+            pageNumber, pageSize);
 
         // Return DTOs.
         return Ok(_mapper.Map<List<WalkDto>>(walksDomainModel));

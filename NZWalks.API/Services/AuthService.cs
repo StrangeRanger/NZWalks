@@ -38,7 +38,7 @@ public class AuthService
                         Code = "AddRolesFailed",
                         Description = exception.Message
                     });
-                    
+
                     Console.WriteLine("[INFO] Removing user from the database...");
                     await _userManager.DeleteAsync(identityUser);
                 }
@@ -51,5 +51,26 @@ public class AuthService
         }
 
         return identityResult;
+    }
+
+    public async Task<IdentityResult> LoginAsync(LoginRequestDto loginRequestDto)
+    {
+        IdentityUser? user = await _userManager.FindByEmailAsync(loginRequestDto.Username);
+
+        if (user is not null)
+        {
+            bool checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+
+            if (checkPasswordResult)
+            {
+                return IdentityResult.Success;
+            }
+        }
+
+        return IdentityResult.Failed(new IdentityError
+        {
+            Code = "LoginFailed",
+            Description = "Invalid username or password."
+        });
     }
 }

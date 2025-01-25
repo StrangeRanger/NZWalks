@@ -34,4 +34,17 @@ public class AuthController : ControllerBase
         return BadRequest(result.Errors.First().Description);
     }
 
+    // POST: /api/Auth/Login
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+    {
+        IdentityResult result = await _authService.LoginAsync(loginRequestDto);
+
+        if (result.Succeeded)
+        {
+            return Ok("User logged in successfully.");
+        }
+
+        return BadRequest(result.Errors.First().Description);
+    }
 }

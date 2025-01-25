@@ -12,18 +12,22 @@ using NZWalks.API.Repositories;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("NZWalksConnectionString") ??
                           throw new InvalidOperationException("Connection string is missing.");
+string authConnectionString = builder.Configuration.GetConnectionString("NZWalksAuthConnectionString") ??
+                              throw new InvalidOperationException("Auth connection string is missing.");
 JwtConfiguration jwtConfiguration = builder.Configuration.GetSection("Jwt").Get<JwtConfiguration>() ??
                                     throw new InvalidOperationException("Jwt configuration is missing.");
 
 // ------ Add services to the container. ------ //
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer(); // TODO: Add comment about the purpose of this...
 builder.Services.AddSwaggerGen(); // TODO: Add comment about the purpose of this...
 builder.Services.AddControllers(); // Required to use the controllers inside the 'Controllers' folder.
 
 // Inject the DbContext into the services' container.
 builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(connectionString));
+// Inject the AuthDbContext into the services' container.
+builder.Services.AddDbContext<NZWalksAuthDbContext>(options => options.UseSqlServer(authConnectionString));
 // Inject the RegionRepository into the services' container. This will allow us to use the RegionRepository in the
 // RegionsController.
 builder.Services.AddScoped<IRegionRepository, SqlRegionRepository>();

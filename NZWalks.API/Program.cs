@@ -1,6 +1,7 @@
 using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -20,24 +21,54 @@ JwtConfiguration jwtConfiguration = builder.Configuration.GetSection("Jwt").Get<
 // ------ Add services to the container. ------ //
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddEndpointsApiExplorer(); // TODO: Add comment about the purpose of this...
-builder.Services.AddSwaggerGen(); // TODO: Add comment about the purpose of this...
-builder.Services.AddControllers(); // Required to use the controllers inside the 'Controllers' folder.
+// Add the API explorer service to the dependency injection container.
+// This service is used to generate metadata for the API endpoints.
+builder.Services.AddEndpointsApiExplorer();
+// Add the Swagger generator to the dependency injection container.
+// This service is used to generate Swagger documentation for the API.
+builder.Services.AddSwaggerGen();
+// Add the MVC controllers to the dependency injection container.
+// This service is used to enable the use of controllers in the application.
+builder.Services.AddControllers();
 
-// Inject the DbContext into the services' container.
+// Register the NZWalksDbContext with the dependency injection container and configure it to use SQL Server with the
+// provided connection string.
 builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(connectionString));
-// Inject the AuthDbContext into the services' container.
+// Register the NZWalksAuthDbContext with the dependency injection container and configure it to use SQL Server with the
+// provided authentication connection string.
 builder.Services.AddDbContext<NZWalksAuthDbContext>(options => options.UseSqlServer(authConnectionString));
-// Inject the RegionRepository into the services' container. This will allow us to use the RegionRepository in the
-// RegionsController.
+
+// Register the IRegionRepository interface with the dependency injection container and configure it to use the
+// SqlRegionRepository implementation.
 builder.Services.AddScoped<IRegionRepository, SqlRegionRepository>();
-// Inject the WalkRepository into the services' container. This will allow us to use the WalkRepository in the
-// WalksController.
+// Register the IWalkRepository interface with the dependency injection container and configure it to use the
+// SqlWalkRepository implementation.
 builder.Services.AddScoped<IWalkRepository, SqlWalkRepository>();
-// Inject AutoMapper into the services' container. This will allow us to use AutoMapper in within the Controllers.
+
+// Register AutoMapper with the dependency injection container and configure it to use the specified AutoMapper
+// profiles.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
-// Inject authentication configurations into the services' container. This will allow us to use JWT authentication
-// within the application.
+
+// TODO: Add comments to explain the purpose of the following code and how it functions...
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("NZWalks")
+    .AddEntityFrameworkStores<NZWalksAuthDbContext>()
+    .AddDefaultTokenProviders();
+
+// Configure the identity system to require strong passwords for user accounts.
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredUniqueChars = 1;
+});
+
+// Add the authentication services to the dependency injection container and configure it to use JWT Bearer
+// authentication.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters()
     {
@@ -54,15 +85,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// If the application is running in the development environment, enable the Swagger middleware to serve the generated
+// Swagger as a JSON endpoint and the Swagger UI middleware to serve the Swagger UI.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection(); // Redirects HTTP requests to HTTPS.
-app.UseAuthentication(); // TODO: Add comment about the purpose of this...
-app.UseAuthorization(); // TODO: Add comment about the purpose of this...
-app.MapControllers(); // Required to use the controllers inside the 'Controllers' folder.
-app.Run(); // Start the application.
+app.UseHttpsRedirection(); // Enable HTTPS redirection for the application.
+app.UseAuthentication(); // Enable authentication middleware to validate and authenticate users.
+app.UseAuthorization(); // Enable authorization middleware to enforce access control policies.
+app.MapControllers(); // Map the controller routes to the endpoints.
+app.Run(); // Run the application.

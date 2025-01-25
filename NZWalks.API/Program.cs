@@ -9,6 +9,7 @@ using NZWalks.API.Data;
 using NZWalks.API.Identity;
 using NZWalks.API.Mappings;
 using NZWalks.API.Repositories;
+using NZWalks.API.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("NZWalksConnectionString") ??
@@ -44,6 +45,9 @@ builder.Services.AddScoped<IRegionRepository, SqlRegionRepository>();
 // Register the IWalkRepository interface with the dependency injection container and configure it to use the
 // SqlWalkRepository implementation.
 builder.Services.AddScoped<IWalkRepository, SqlWalkRepository>();
+// Register the AuthService class with the dependency injection container and configure it to use the scoped lifetime.
+// This ensures that a new instance of AuthService is created for each request.
+builder.Services.AddScoped<AuthService>();
 
 // Register AutoMapper with the dependency injection container and configure it to use the specified AutoMapper
 // profiles.
@@ -67,6 +71,9 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 });
 
+// Register the JwtConfiguration instance as a singleton service in the dependency injection container.
+// This ensures that the same instance of JwtConfiguration is used throughout the application.
+builder.Services.AddSingleton(jwtConfiguration);
 // Add the authentication services to the dependency injection container and configure it to use JWT Bearer
 // authentication.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

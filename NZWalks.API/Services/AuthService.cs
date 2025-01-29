@@ -7,10 +7,12 @@ namespace NZWalks.API.Services;
 public class AuthService
 {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly TokenService _tokenService;
 
-    public AuthService(UserManager<IdentityUser> userManager)
+    public AuthService(UserManager<IdentityUser> userManager, TokenService tokenService)
     {
         _userManager = userManager;
+        _tokenService = tokenService;
     }
 
     public async Task<IdentityResult> RegisterAsync(RegisterRequestDto registerRequestDto)
@@ -53,7 +55,7 @@ public class AuthService
         return identityResult;
     }
 
-    public async Task<IdentityResult> LoginAsync(LoginRequestDto loginRequestDto)
+    public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
     {
         IdentityUser? user = await _userManager.FindByEmailAsync(loginRequestDto.Username);
 
@@ -63,14 +65,31 @@ public class AuthService
 
             if (checkPasswordResult)
             {
-                return IdentityResult.Success;
+                // Get the roles for the user.
+                IList<string> roles = await _userManager.GetRolesAsync(user);
+
+                if (roles is not null)
+                {
+                    // Create a JWT token.
+                    string jwtToken = _tokenService.CreateJwtToken(user, roles.ToList());
+
+                    // Return the token.
+                    return new LoginResponseDto()
+                    {
+                        JwtToken = jwtToken,
+                        Result = IdentityResult.Success
+                    };
+                }
             }
         }
 
-        return IdentityResult.Failed(new IdentityError
+        return new LoginResponseDto()
         {
-            Code = "LoginFailed",
-            Description = "Invalid username or password."
-        });
+            Result = IdentityResult.Failed(new IdentityError
+            {
+                Code = "LoginFailed",
+                Description = "Invalid username or password."
+            })
+        };
     }
 }

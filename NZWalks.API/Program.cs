@@ -48,6 +48,9 @@ builder.Services.AddScoped<IWalkRepository, SqlWalkRepository>();
 // Register the AuthService class with the dependency injection container and configure it to use the scoped lifetime.
 // This ensures that a new instance of AuthService is created for each request.
 builder.Services.AddScoped<AuthService>();
+// Register the TokenService class with the dependency injection container and configure it to use the scoped lifetime.
+// This ensures that a new instance of TokenService is created for each request.
+builder.Services.AddScoped<TokenService>();
 
 // Register AutoMapper with the dependency injection container and configure it to use the specified AutoMapper
 // profiles.

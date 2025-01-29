@@ -38,13 +38,13 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
     {
-        IdentityResult result = await _authService.LoginAsync(loginRequestDto);
+        LoginResponseDto result = await _authService.LoginAsync(loginRequestDto);
 
-        if (result.Succeeded)
+        if (result.Result.Succeeded)
         {
-            return Ok("User logged in successfully.");
+            return Ok(result);
         }
 
-        return BadRequest(result.Errors.First().Description);
+        return BadRequest(result.Result.Errors.First().Description);
     }
 }

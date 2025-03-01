@@ -13,7 +13,6 @@ namespace NZWalks.API.Controllers;
 // https://localhost:1234/api/regions
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class RegionsController : ControllerBase
 {
     // Represents a collection of methods that allow us to interact with the Region table in the database.
@@ -28,6 +27,7 @@ public class RegionsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Reader")]
     public async Task<IActionResult> GetAllRegions()
     {
         // Get regions from database via Repository.
@@ -38,6 +38,7 @@ public class RegionsController : ControllerBase
     }
 
     [HttpGet("{id:Guid}")]
+    [Authorize(Roles = "Reader")]
     public async Task<IActionResult> GetRegionById([FromRoute] Guid id)
     {
         // Get region via id from database via Repository.
@@ -54,6 +55,7 @@ public class RegionsController : ControllerBase
 
     [HttpPost]
     [ValidateModel]
+    [Authorize(Roles = "Writer")]
     public async Task<IActionResult> AddRegion([FromBody] AddRegionRequestDto addRegionRequestDto)
     {
         // Map DTO to Domain Model.
@@ -72,6 +74,7 @@ public class RegionsController : ControllerBase
 
     [HttpPut("{id:Guid}")]
     [ValidateModel]
+    [Authorize(Roles = "Writer")]
     public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
     {
         // Map DTO to Domain Model.
@@ -90,6 +93,7 @@ public class RegionsController : ControllerBase
     }
 
     [HttpDelete("{id:Guid}")]
+    [Authorize(Roles = "Writer")]
     public async Task<IActionResult> DeleteRegion([FromRoute] Guid id)
     {
         // Delete region from database via Repository.
